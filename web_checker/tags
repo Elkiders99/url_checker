@@ -1,0 +1,29 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_OUTPUT_FILESEP	slash	/slash or backslash/
+!_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
+!_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
+!_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
+!_TAG_PROGRAM_URL	https://ctags.io/	/official site/
+!_TAG_PROGRAM_VERSION	0.0.0	/a3c87ab5/
+TooManyCallsError	functions.py	/^class TooManyCallsError(Exception):$/;"	c
+Urls	models.py	/^class Urls(db.Model):$/;"	c
+__init__	functions.py	/^    def __init__(self,url,attempt):$/;"	m	class:TooManyCallsError
+__rerp__	models.py	/^    def __rerp__(self):$/;"	m	class:Urls
+add_schema	functions.py	/^def add_schema(web):$/;"	f
+app	__init__.py	/^app = Flask(__name__)$/;"	v
+attempt	models.py	/^    attempt = db.Column(db.Integer)$/;"	v	class:Urls
+check_all_urls	routes.py	/^def check_all_urls():$/;"	f
+check_urls	functions.py	/^def check_urls():$/;"	f
+check_web	functions.py	/^def check_web(web,attempt,call_limit=5,timeout=None):$/;"	f
+crontab	__init__.py	/^crontab = Crontab(app)$/;"	v
+db	__init__.py	/^db = SQLAlchemy(app)$/;"	v
+entry	routes.py	/^def entry():$/;"	f
+id	models.py	/^    id = db.Column(db.Integer,primary_key=True)$/;"	v	class:Urls
+ls	routes.py	/^def ls():$/;"	f
+register_url	functions.py	/^def register_url(url, db):$/;"	f
+send_notification	functions.py	/^def send_notification(url):$/;"	f
+succesful_check	functions.py	/^def succesful_check(url):$/;"	f
+update_url_entry	functions.py	/^def update_url_entry(url,attempt):$/;"	f
+url	models.py	/^    url = db.Column(db.String(1000),nullable=False)$/;"	v	class:Urls
+validate_Url	functions.py	/^def validate_Url(url):$/;"	f
