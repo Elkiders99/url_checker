@@ -1,2 +1,5 @@
 # url_checker
-asdffffffffffffffffffffffffffffff esto es un parrafoasdffffffffffffffffffffffffffffff esto es un parrafoasdffffffffffffffffffffffffffffff esto es un parrafoasdffffffffffffffffffffffffffffff esto es un parrafoasdffffffffffffffffffffffffffffff esto es un parrafoasdffffffffffffffffffffffffffffff esto es un parrafoasdffffffffffffffffffffffffffffff esto es un parrafoasdffffffffffffffffffffffffffffff esto es un parrafoasdffffffffffffffffffffffffffffff esto es un parrafoasdffffffffffffffffffffffffffffff esto es un parrafoasdffffffffffffffffffffffffffffff esto es un parrafoasdffffffffffffffffffffffffffffff esto es un parrafoasdffffffffffffffffffffffffffffff esto es un parrafoasdffffffffffffffffffffffffffffff esto es un parrafoasdffffffffffffffffffffffffffffff esto es un parrafoasdffffffffffffffffffffffffffffff esto es un parrafo
+Runs a small server that will wait for client requests to check a URL until it comes up. Once it does a notification is sent to the desktop.
+
+## Instalation
+
