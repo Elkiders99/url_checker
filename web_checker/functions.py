@@ -4,17 +4,21 @@ from requests.exceptions import InvalidURL,InvalidHeader, MissingSchema
 from time import sleep
 from web_checker.models import Urls
 from web_checker import db
+from datetime import datetime
+import subprocess
+import os
+from sqlalchemy import desc
 
+attempt_limit=3
+update_log_file='/home/piojox/db_log_file'
+block_file='/tmp/url_checker'
+block_signal=13
+block_msg='URL is up!'
 
-web_status={'Down':'down',# No sabemos si esta up o no(Inicializamos asi)
+web_status={'Down':'down',# No anduvo la ultima vez(Inicializamos asi)
             'Dead':'dead',# supero la cantidad maxima de llamados
             'Up':'up',#esta andando
         }
-
-class TooManyCallsError(Exception):
-    def __init__(self,url,attempt):
-        self.url = url
-        self.attempt = attempt
 
 
 def check_web(web,timeout=None):
@@ -46,7 +50,7 @@ def validate_Url(url):
                 return url
         except MissingSchema as e:
             url = add_schema(url)
-        except (InvalidURL,InvalidHeader) as e:
+        except (InvalidURL,InvalidHeader,ConnectionError) as e:
             raise e
         except RequestException:
             return url
@@ -56,17 +60,12 @@ def register_url(url):
     """ Register to the URL to be processed later"""
     try:
         url = validate_Url(url)
-    except (InvalidURL,InvalidHeader) as e:
+    except (InvalidURL,InvalidHeader,ConnectionError) as e:
         return False, url
-    db.session.add(Urls(url=url,attempt=0,status=web_status['Down']))
+    db.session.add(Urls(url=url,attempt=0,status=web_status['Down'],register_time=datetime.now()))
     db.session.commit()
     return True, url
 
-
-def succesful_check(url):
-    db.session.delete(url)
-    db.session.commit()
-    send_notification(url.url)
 
 
 def update_url(url):
@@ -74,22 +73,22 @@ def update_url(url):
     link = url.url
     attempt = url.attempt
     if url.status == 'dead':
-        print('its dead!')
+        print(f'its dead!')
         return
     elif url.status == 'up':
-        print('its up!')
+        print(f'its up! {url.url}')
         return
     attempt += 1
     curr_status = check_web(link)
     if curr_status:
         url.status = web_status['Up']
-        print('its now up!')
-    elif attempt > 5:
-        url.status = web_status['Dead']
-        print('too many calls... killing it')
+        print(f'its now up! {url.url}')
+    elif attempt > attempt_limit:
+        db.session.delete(url)
+        print(f'too many calls... killing it {url.url}')
     else:
         url.status = web_status['Down']
-        print('still down')
+        print(f'still down {url.url}')
     url.attempt = attempt
 
     
@@ -97,9 +96,14 @@ def update_url_db():
     urls = Urls.query.all()
     for url in urls:
         update_url(url)
-    db.session.commit()
-
-
+    ups,downs,deads=url_status()
+    print(len(ups))
+    if len(ups) > 0:
+        call_block()
+    else:
+        block_terminate()
+    db.session.commit() 
+    temp_update_log()
 
 def url_status():
     deads=Urls.query.filter_by(status='dead').all()
@@ -109,4 +113,27 @@ def url_status():
 
 def send_notification(url):
     print(f'{url} is running!')
+
+def temp_update_log():
+    print('updating db')
+    with open(update_log_file,'w') as f:
+        f.write('updating db @'+str(datetime.now().time()))
+
+def call_block():
+    with open(block_file,'w') as f:
+        f.write(block_msg)
+    subprocess.Popen(['pkill',f'-RTMIN+{block_signal}','i3blocks'])
+
+def block_terminate():
+    os.remove(block_file)
+    subprocess.Popen(['pkill',f'-RTMIN+{block_signal}','i3blocks'])
+    return None
+
+def process_block_call():
+    url=Urls.query.order_by(desc(Urls.register_time)).first()
+    subprocess.Popen(['chromium',url.url])
+    db.session.delete(url)
+    update_url_db()
+    return None
+
 

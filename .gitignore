@@ -1,3 +1,5 @@
 venv/*
 __pycache__/*
-web_checker/*.db
+*.db
+*tags
+
