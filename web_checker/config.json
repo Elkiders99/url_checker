@@ -1,0 +1,5 @@
+{"attempt_limit":100,
+"update_log_file":"/home/piojox/db_log_file",
+"block_file":"/tmp/url_checker",
+"block_signal":13,
+"block_msg":"URL is up!"}

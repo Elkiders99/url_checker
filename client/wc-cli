@@ -1,0 +1,23 @@
+#!/usr/bin/python
+import sys
+
+import requests
+add_server = 'http://127.0.0.1:5000'
+ls_server = 'http://127.0.0.1:5000/checkUrls'
+
+def list_status():
+    r = requests.get(ls_server)
+    return r.text
+
+def post_url_for_check(url):
+    payload = {'url':url}
+    r = requests.post(add_server,data=payload)
+    return r.text
+
+command = sys.argv[1]
+if command == 'add':
+    print(post_url_for_check(sys.argv[2]))
+elif command == 'ls':
+    print(list_status())
+else:
+    print('command not known')

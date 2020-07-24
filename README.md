@@ -20,7 +20,7 @@ run the server
 
 Add urls that you want to check
 
->web_check \<url\>
+>wc-cli add \<url\>
  
 That's it! you will be notified!
 
